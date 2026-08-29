@@ -174,7 +174,6 @@
       result.textContent = text;
     }
 
-    // Отправка заявки (имя, телефон, координаты) на сервер
     async function sendContact(position, name, phone) {
       const data = {
         name: name,
@@ -204,7 +203,6 @@
       }
       show('Спасибо, ' + name + '! Мы свяжемся с вами по номеру ' + phone + '.');
 
-      // Отправляем заявку вместе с местоположением (если доступно)
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => sendContact(position, name, phone),
