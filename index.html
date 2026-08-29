@@ -23,8 +23,8 @@
     const result = document.getElementById('result');
     const sendBtn = document.getElementById('sendBtn');
 
-    // Адрес сервера (если сервер на этом же компьютере)
-    const SERVER_URL = 'http://localhost:3000/location';
+    // Относительный адрес — работает и локально, и на Render
+    const SERVER_URL = '/location';
 
     function show(text) {
       result.style.display = 'block';
@@ -41,7 +41,6 @@
       show('Отправляю координаты на сервер...');
 
       try {
-        // Отправляем POST-запрос с JSON-данными
         const response = await fetch(SERVER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
