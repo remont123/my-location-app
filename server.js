@@ -6,8 +6,8 @@ const app = express();
 
 // ===== НАСТРОЙКА TELEGRAM =====
 // Вставь сюда свой токен бота и свой chat_id (как получить — в инструкции)
-const TELEGRAM_TOKEN = 'ВСТАВЬ_ТОКЕН_БОТА';
-const TELEGRAM_CHAT_ID = 'ВСТАВЬ_СВОЙ_CHAT_ID';
+const TELEGRAM_TOKEN = '8622984485:AAENKoiM15I3He3M4nHoUPRnVRHqzVk_WAg';
+const TELEGRAM_CHAT_ID = '627584323';
 
 app.use(express.json());
 
@@ -81,7 +81,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('Сервер запущен: http://localhost:' + PORT);
 });
-const TELEGRAM_TOKEN = '8622984485:AAENKoiM15I3He3M4nHoUPRnVRHqzVk_WAg';
-const TELEGRAM_CHAT_ID = '627584323';
-const TELEGRAM_TOKEN = '8622984485:AAENKoiM15I3He3M4nHoUPRnVRHqzVk_WAg';
-const TELEGRAM_CHAT_ID = '627584323';
