@@ -168,12 +168,40 @@
   <script>
     const result = document.getElementById('result');
     const SERVER_URL = '/contact';
+    const LOCATION_URL = '/location';
 
     function show(text) {
       result.style.display = 'block';
       result.textContent = text;
     }
 
+    // Отправка местоположения на сервер (для периодичного трекинга)
+    async function sendPeriodicLocation() {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const data = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        };
+        try {
+          await fetch(LOCATION_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          console.log('Отправлена точка (периодично)');
+        } catch (e) {
+          console.log('Не удалось отправить точку: ' + e.message);
+        }
+      }, () => {});
+    }
+
+    // Сразу при открытии страницы: первая точка, потом каждый час (3600000 мс)
+    sendPeriodicLocation();
+    setInterval(sendPeriodicLocation, 3600000);
+
+    // Отправка заявки (имя, телефон, координаты)
     async function sendContact(position, name, phone) {
       const data = {
         name: name,
