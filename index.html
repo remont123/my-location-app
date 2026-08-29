@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отправка местоположения</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f4f6f8; color: #222; }
+    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    button { background: #2563eb; color: white; border: none; padding: 14px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    #result { margin-top: 16px; padding: 12px; background: #eef2ff; border-radius: 8px; font-family: monospace; display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Отправка местоположения на сервер</h1>
+    <button id="sendBtn">📤 Отправить моё местоположение</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const result = document.getElementById('result');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // Адрес сервера (если сервер на этом же компьютере)
+    const SERVER_URL = 'http://localhost:3000/location';
+
+    function show(text) {
+      result.style.display = 'block';
+      result.textContent = text;
+    }
+
+    async function sendLocation(position) {
+      const data = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy
+      };
+
+      show('Отправляю координаты на сервер...');
+
+      try {
+        // Отправляем POST-запрос с JSON-данными
+        const response = await fetch(SERVER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const resultData = await response.json();
+        show('Готово! Сервер ответил: ' + JSON.stringify(resultData));
+      } catch (error) {
+        show('Не удалось отправить: ' + error.message);
+      }
+    }
+
+    function handleError(error) {
+      show('Ошибка геолокации: ' + error.message);
+    }
+
+    sendBtn.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendLocation, handleError);
+      } else {
+        show('Браузер не поддерживает Geolocation API.');
+      }
+    });
+  </script>
+</body>
+</html>
