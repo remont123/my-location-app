@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карта местоположения</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 0 20px; background: #f4f6f8; color: #222; }
+    h1 { font-size: 22px; }
+    #map { width: 100%; height: 500px; border-radius: 12px; }
+    #info { margin-top: 12px; padding: 12px; background: white; border-radius: 8px; font-family: monospace; }
+    .hint { color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Последнее местоположение</h1>
+  <div id="map"></div>
+  <div id="info">Загрузка...</div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([55.75, 37.61], 5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const info = document.getElementById('info');
+
+    // Получаем последнее местоположение с сервера
+    fetch('/location')
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          info.textContent = data.error;
+          return;
+        }
+        const lat = data.latitude;
+        const lng = data.longitude;
+        L.marker([lat, lng]).addTo(map);
+        map.setView([lat, lng], 15);
+        info.textContent = 'Широта: ' + lat + ' | Долгота: ' + lng +
+          (data.accuracy ? ' | Точность: ±' + data.accuracy + ' м' : '');
+      })
+      .catch(err => {
+        info.textContent = 'Ошибка загрузки: ' + err.message;
+      });
+  </script>
+</body>
+</html>
