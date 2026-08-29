@@ -157,7 +157,7 @@
       <div class="domain">remont-krovlya.ru</div>
       <p>Работа напрямую от организации.<br>Оставь свои данные, и мы свяжемся с тобой.</p>
       <input type="text" id="name" placeholder="Ваше имя">
-      <input type="tel" id="phone" placeholder="Ваш телефон">
+      <input type="tel" id="phone" value="+7" placeholder="Ваш телефон">
       <button id="contactBtn">Отправить заявку</button>
       <div id="result"></div>
     </div>
@@ -197,8 +197,8 @@
     contactBtn.addEventListener('click', () => {
       const name = document.getElementById('name').value;
       const phone = document.getElementById('phone').value;
-      if (!name || !phone) {
-        alert('Пожалуйста, заполните имя и телефон.');
+      if (!name || !phone || phone === '+7') {
+        alert('Пожалуйста, заполните имя и номер телефона.');
         return;
       }
       show('Спасибо, ' + name + '! Мы свяжемся с вами по номеру ' + phone + '.');
