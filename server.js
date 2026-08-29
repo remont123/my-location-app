@@ -5,7 +5,6 @@ const express = require('express');
 const app = express();
 
 // ===== НАСТРОЙКА TELEGRAM =====
-// Вставь сюда свой токен бота и свой chat_id (как получить — в инструкции)
 const TELEGRAM_TOKEN = '8622984485:AAENKoiM15I3He3M4nHoUPRnVRHqzVk_WAg';
 const TELEGRAM_CHAT_ID = '627584323';
 
@@ -17,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Главная страница — форма для отправки местоположения
+// Главная страница
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -49,7 +48,6 @@ app.post('/location', async (req, res) => {
   lastLocation = { latitude, longitude, accuracy };
   console.log('Получено местоположение: ' + latitude + ', ' + longitude);
 
-  // Отправляем уведомление в Telegram
   if (TELEGRAM_TOKEN !== 'ВСТАВЬ_ТОКЕН_БОТА' && TELEGRAM_CHAT_ID !== 'ВСТАВЬ_СВОЙ_CHAT_ID') {
     try {
       const text = '📍 Новое местоположение:\n' +
@@ -61,17 +59,50 @@ app.post('/location', async (req, res) => {
       await fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: text
-        })
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
       });
       console.log('Уведомление отправлено в Telegram');
     } catch (e) {
       console.log('Не удалось отправить в Telegram: ' + e.message);
     }
   } else {
-    console.log('Telegram не настроен (вставь токен и chat_id)');
+    console.log('Telegram не настроен');
+  }
+
+  res.json({ ok: true });
+});
+
+// Принимает заявку (имя, телефон, координаты) — POST /contact
+app.post('/contact', async (req, res) => {
+  const { name, phone, latitude, longitude, accuracy } = req.body;
+
+  if (!name || !phone) {
+    return res.status(400).json({ error: 'Нет имени или телефона' });
+  }
+
+  let text = '📋 Новая заявка:\n' +
+    'Имя: ' + name + '\n' +
+    'Телефон: ' + phone;
+
+  if (latitude !== undefined && longitude !== undefined) {
+    text += '\n📍 Местоположение: ' + latitude + ', ' + longitude +
+      (accuracy ? ' (±' + accuracy + ' м)' : '') +
+      '\nКарта: https://www.google.com/maps?q=' + latitude + ',' + longitude;
+  }
+
+  if (TELEGRAM_TOKEN !== 'ВСТАВЬ_ТОКЕН_БОТА' && TELEGRAM_CHAT_ID !== 'ВСТАВЬ_СВОЙ_CHAT_ID') {
+    try {
+      await fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+      });
+      console.log('Заявка отправлена в Telegram');
+    } catch (e) {
+      console.log('Не удалось отправить заявку в Telegram: ' + e.message);
+    }
+  } else {
+    console.log('Telegram не настроен');
   }
 
   res.json({ ok: true });

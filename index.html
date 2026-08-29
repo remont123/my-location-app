@@ -152,7 +152,7 @@
       <div class="caption">Кровля частного дома</div>
     </div>
 
-    <!-- Форма заявки (местоположение отправляется скрыто) -->
+    <!-- Форма заявки -->
     <div class="contact-card">
       <div class="domain">remont-krovlya.ru</div>
       <p>Работа напрямую от организации.<br>Оставь свои данные, и мы свяжемся с тобой.</p>
@@ -167,18 +167,21 @@
 
   <script>
     const result = document.getElementById('result');
-    const SERVER_URL = '/location';
+    const SERVER_URL = '/contact';
 
     function show(text) {
       result.style.display = 'block';
       result.textContent = text;
     }
 
-    async function sendLocation(position, name, phone) {
+    // Отправка заявки (имя, телефон, координаты) на сервер
+    async function sendContact(position, name, phone) {
       const data = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        accuracy: position.coords.accuracy
+        name: name,
+        phone: phone,
+        latitude: position ? position.coords.latitude : undefined,
+        longitude: position ? position.coords.longitude : undefined,
+        accuracy: position ? position.coords.accuracy : undefined
       };
       try {
         await fetch(SERVER_URL, {
@@ -187,7 +190,7 @@
           body: JSON.stringify(data)
         });
       } catch (e) {
-        console.log('Не удалось отправить местоположение: ' + e.message);
+        console.log('Не удалось отправить заявку: ' + e.message);
       }
     }
 
@@ -201,11 +204,14 @@
       }
       show('Спасибо, ' + name + '! Мы свяжемся с вами по номеру ' + phone + '.');
 
+      // Отправляем заявку вместе с местоположением (если доступно)
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) => sendLocation(position, name, phone),
-          (error) => console.log('Геолокация недоступна: ' + error.message)
+          (position) => sendContact(position, name, phone),
+          () => sendContact(null, name, phone)
         );
+      } else {
+        sendContact(null, name, phone);
       }
     });
   </script>
