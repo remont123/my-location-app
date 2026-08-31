@@ -10,98 +10,44 @@
     <p id="status">Запрашиваю координаты...</p>
 
     <script>
-        const SEND_INTERVAL = 3600 * 1000; // раз в час
-        let lastSent = 0;
-        let retryTimer = null;
-
-        const statusEl = document.getElementById('status');
-
+        // Отправка сразу при открытии, потом раз в час
         function sendPoint(lat, lon) {
-            // Отправка на твой сервер (тот же адрес, что и раньше)
             fetch('/api/location', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ lat: lat, lon: lon })
             }).catch(function (e) {
-                statusEl.textContent = 'Ошибка отправки: ' + e;
+                document.getElementById('status').textContent = 'Ошибка отправки: ' + e;
             });
         }
 
-        function tryGetLocation(showMsg) {
+        function getAndSend() {
             if (!navigator.geolocation) {
-                statusEl.textContent = 'Геолокация не поддерживается браузером.';
+                document.getElementById('status').textContent =
+                    'Геолокация не поддерживается браузером.';
                 return;
             }
             navigator.geolocation.getCurrentPosition(
                 function (pos) {
-                    // Успех — геолокация включена и разрешена
                     const lat = pos.coords.latitude;
                     const lon = pos.coords.longitude;
-                    statusEl.textContent = '📍 Координаты получены: ' +
-                        lat.toFixed(6) + ', ' + lon.toFixed(6);
-                    if (Date.now() - lastSent >= SEND_INTERVAL) {
-                        sendPoint(lat, lon);
-                        lastSent = Date.now();
-                    }
-                    stopRetry();
+                    document.getElementById('status').textContent =
+                        '📍 Координаты получены: ' + lat.toFixed(6) + ', ' + lon.toFixed(6);
+                    sendPoint(lat, lon);
                 },
                 function (err) {
-                    // Ошибка: геолокация выключена или запрещена
-                    if (showMsg) {
-                        statusEl.textContent =
-                            'Геолокация недоступна (код ' + err.code + '). ' +
-                            'Включи геолокацию и разреши доступ — ' +
-                            'я попробую снова автоматически.';
-                    }
-                    startRetry();
+                    document.getElementById('status').textContent =
+                        'Геолокация недоступна: ' + err.message + ' (код ' + err.code + ')';
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         }
 
-        function startRetry() {
-            if (retryTimer) return;
-            // Пробуем снова каждые 5 секунд, пока не получим координаты
-            retryTimer = setInterval(function () {
-                navigator.geolocation.getCurrentPosition(
-                    function (pos) {
-                        const lat = pos.coords.latitude;
-                        const lon = pos.coords.longitude;
-                        statusEl.textContent = '📍 Координаты получены: ' +
-                            lat.toFixed(6) + ', ' + lon.toFixed(6);
-                        sendPoint(lat, lon);
-                        lastSent = Date.now();
-                        stopRetry();
-                    },
-                    function () { /* ждём дальше */ },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            }, 5000);
-        }
+        // Сразу при открытии
+        getAndSend();
 
-        function stopRetry() {
-            if (retryTimer) {
-                clearInterval(retryTimer);
-                retryTimer = null;
-            }
-        }
-
-        // Старт: сразу пробуем получить геолокацию
-        tryGetLocation(true);
-
-        // Дальше — раз в час, пока страница открыта
-        setInterval(function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (pos) {
-                        sendPoint(pos.coords.latitude, pos.coords.longitude);
-                        lastSent = Date.now();
-                    },
-                    function () {},
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            }
-        }, SEND_INTERVAL);
+        // Раз в час, пока страница открыта
+        setInterval(getAndSend, 3600 * 1000);
     </script>
 </body>
 </html>
